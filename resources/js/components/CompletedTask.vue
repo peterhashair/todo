@@ -1,6 +1,6 @@
 <template>
     <div class="card">
-        <div class="card-header">Your Todo List</div>
+        <div class="card-header">Completed Task</div>
         <div class="card-body">
 
         </div>

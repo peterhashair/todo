@@ -21,6 +21,9 @@ window.Vue = require('vue');
 
 // Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('new-task', require('./components/NewTask.vue').default);
+Vue.component('inprogress-task', require('./components/InprogressTask.vue').default);
+Vue.component('complete-task', require('./components/CompletedTask.vue').default);
+Vue.component('assign-select', require('./components/AssignTask.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
