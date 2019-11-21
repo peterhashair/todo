@@ -8,4 +8,6 @@ class TaskToUser extends Model
 {
     //
     protected $table = "task_to_user";
+    public $timestamps = false;
+
 }

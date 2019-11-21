@@ -1855,6 +1855,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
  // register globally
 
 Vue.component('multiselect', vue_multiselect__WEBPACK_IMPORTED_MODULE_0___default.a);
@@ -1866,13 +1868,23 @@ Vue.component('multiselect', vue_multiselect__WEBPACK_IMPORTED_MODULE_0___defaul
   },
   data: function data() {
     return {
+      assign: [],
       value: null,
       options: []
     };
   },
   mounted: function mounted() {
     this.options = JSON.parse(this.users);
-    console.log(this.options);
+  },
+  methods: {
+    onChange: function onChange(value) {
+      for (var i = 0; i < value.length; i++) {
+        this.assign[i] = value[i].id;
+      }
+    },
+    onRemove: function onRemove(option) {
+      this.assign.splice(option.id, 1);
+    }
   }
 });
 
@@ -37927,14 +37939,19 @@ var render = function() {
   return _c(
     "div",
     [
+      _c("input", {
+        attrs: { type: "hidden", name: "assign" },
+        domProps: { value: _vm.assign }
+      }),
+      _vm._v(" "),
       _c("multiselect", {
         attrs: {
           options: _vm.options,
           multiple: true,
           label: "name",
-          value: "id",
-          name: "assign"
+          "track-by": "name"
         },
+        on: { input: _vm.onChange, remove: _vm.onRemove },
         model: {
           value: _vm.value,
           callback: function($$v) {

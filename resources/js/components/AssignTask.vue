@@ -1,13 +1,15 @@
 <!-- Vue component -->
 <template>
     <div>
+        <input type="hidden" name="assign" :value="assign">
         <multiselect
             v-model="value"
             :options="options"
             :multiple="true"
             label="name"
-            value="id"
-            name="assign"
+            track-by="name"
+            @input="onChange"
+            @remove="onRemove"
         >
         </multiselect>
     </div>
@@ -25,14 +27,25 @@
         components: {Multiselect},
         data() {
             return {
+                assign: [],
                 value: null,
                 options: []
             }
         },
         mounted() {
             this.options = JSON.parse(this.users);
-            console.log(this.options);
         },
+        methods: {
+            onChange: function (value) {
+                for (let i = 0; i < value.length; i++) {
+                    this.assign[i] = value[i].id;
+                }
+
+            },
+            onRemove: function (option) {
+                this.assign.splice(option.id, 1);
+            }
+        }
     }
 </script>
 

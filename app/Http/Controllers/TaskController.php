@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Task;
+use App\TaskToUser;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use phpDocumentor\Reflection\DocBlock\Tags\Reference\Fqsen;
 
 class TaskController extends Controller
 {
@@ -33,7 +36,7 @@ class TaskController extends Controller
     public function create()
     {
         //
-        $users = User::select('id','name')->get();
+        $users = User::select('id', 'name')->get();
         return view('task.create', compact('users'));
     }
 
@@ -45,7 +48,28 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // valid post varibles
+        $request->validate([
+            'title' => 'bail|required|unique:tasks|max:255',
+            'assign' => 'required',
+            'description' => 'required',
+        ]);
+        $task = new Task();
+        $task->title = $request->input('title');
+        $task->user_id = Auth::id();
+        $task->body = $request->input('description');
+        $task->status = 'New';
+        if ($task->save()) {
+            $assigns = explode(",", $request->input('assign'));
+            foreach ($assigns as $row) {
+                $task->user_id = Auth::id();
+                $relation = new TaskToUser();
+                $relation->task_id = $task->id;
+                $relation->user_id = $row;
+                $relation->save();
+            }
+            return redirect('home');
+        }
     }
 
     /**
