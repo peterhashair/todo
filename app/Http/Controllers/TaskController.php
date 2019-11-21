@@ -19,10 +19,10 @@ class TaskController extends Controller
      */
     public function index()
     {
-        //
         $tasks = Task::all();
         return view('home');
 
+    }
     /**
      * Show the form for creating a new resource.
      *
