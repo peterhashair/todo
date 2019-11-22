@@ -56,6 +56,9 @@ const app = new Vue({
 
                 }
             });
+        },
+        changeStatus(id, status) {
+            axios.put('/task/' + id);
         }
     }
 });

@@ -17,7 +17,7 @@
                         @endif
                         <div class="row">
                             <div class="col-md-4">
-                                <new-task :tasks="tasks" v-on:gettask="getTask"></new-task>
+                                <new-task :tasks="tasks" v-on:changestatus="changeStatus" v-on:gettask="getTask"></new-task>
                             </div>
                             <div class="col-md-4">
                                 <inprogress-task :ptasks="ptasks" v-on:gettask="getTask"></inprogress-task>

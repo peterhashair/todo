@@ -8,6 +8,11 @@
                         <a v-bind:href="'task/'+task.id">{{ task.title }}</a><br>
                         <span>{{ task.updated_at }}</span><br>
                         {{ task.body }}
+                        <br>
+                        <button v-on:click="changeStatus(task.id,'In Progress')" class="btn btn-info">Set In Progress
+                        </button>
+                        <button v-on:click="changeStatus(task.id,'Completed')" class="btn btn-success">Set Completed
+                        </button>
                     </li>
                 </ul>
             </div>
@@ -25,6 +30,9 @@
             getTask() {
                 this.$emit('gettask', 'New');
 
+            },
+            changeStatus(id, status) {
+                this.$emit('changestatus', id, status);
             }
         }
     }

@@ -1996,6 +1996,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['tasks'],
   mounted: function mounted() {
@@ -2004,6 +2009,9 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     getTask: function getTask() {
       this.$emit('gettask', 'New');
+    },
+    changeStatus: function changeStatus(id, status) {
+      this.$emit('changestatus', id, status);
     }
   }
 });
@@ -38132,7 +38140,34 @@ var render = function() {
               _vm._v(
                 "\n                    " +
                   _vm._s(task.body) +
-                  "\n                "
+                  "\n                    "
+              ),
+              _c("br"),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-info",
+                  on: {
+                    click: function($event) {
+                      return _vm.changeStatus(task.id, "In Progress")
+                    }
+                  }
+                },
+                [_vm._v("Set In Progress\n                    ")]
+              ),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-success",
+                  on: {
+                    click: function($event) {
+                      return _vm.changeStatus(task.id, "Completed")
+                    }
+                  }
+                },
+                [_vm._v("Set Completed\n                    ")]
               )
             ])
           ])
@@ -50373,6 +50408,9 @@ var app = new Vue({
           _this.ctasks = response.data;
         } else {}
       });
+    },
+    changeStatus: function changeStatus(id, status) {
+      axios.put('/task/' + id);
     }
   }
 });
