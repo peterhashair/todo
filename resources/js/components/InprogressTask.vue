@@ -1,29 +1,31 @@
 <template>
     <div class="card">
-        <div class="card-header">In progress Task</div>
+        <div class="card-header">Your Todo List</div>
         <div class="card-body">
-            <ul class="list-group" v-for="task in tasks">
-                <li class="list-group-item">{{ task.title }}</li>
-            </ul>
+            <div>
+                <ul class="list-group" v-for="task in ptasks">
+                    <li class="list-group-item">
+                        <a v-bind:href="'task/'+task.id">{{ task.title }}</a><br>
+                        <span>{{ task.updated_at }}</span><br>
+                        {{ task.body }}
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
     export default {
-        data() {
-            return {
-                tasks: []
-            }
-        },
+        props: ['ptasks'],
         mounted() {
-            axios.get('/home/tasks', {
-                params: {
-                    status: "In Progress"
-                }
-            }).then((response) => {
-                this.tasks = response.data;
-            });
+            this.getTask();
+        },
+        methods: {
+            getTask() {
+                this.$emit('gettask', 'In Progress');
+
+            }
         }
     }
 </script>

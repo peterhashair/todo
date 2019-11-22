@@ -1910,22 +1910,21 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  data: function data() {
-    return {
-      tasks: []
-    };
-  },
+  props: ['ctasks'],
   mounted: function mounted() {
-    var _this = this;
-
-    axios.get('/home/tasks', {
-      params: {
-        status: "Completed"
-      }
-    }).then(function (response) {
-      _this.tasks = response.data;
-    });
+    this.getTask();
+  },
+  methods: {
+    getTask: function getTask() {
+      this.$emit('gettask', 'Completed');
+    }
   }
 });
 
@@ -1951,22 +1950,21 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  data: function data() {
-    return {
-      tasks: []
-    };
-  },
+  props: ['ptasks'],
   mounted: function mounted() {
-    var _this = this;
-
-    axios.get('/home/tasks', {
-      params: {
-        status: "In Progress"
-      }
-    }).then(function (response) {
-      _this.tasks = response.data;
-    });
+    this.getTask();
+  },
+  methods: {
+    getTask: function getTask() {
+      this.$emit('gettask', 'In Progress');
+    }
   }
 });
 
@@ -1999,21 +1997,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  data: function data() {
-    return {
-      tasks: []
-    };
-  },
+  props: ['tasks'],
   mounted: function mounted() {
-    var _this = this;
-
-    axios.get('/home/tasks', {
-      params: {
-        status: "New"
-      }
-    }).then(function (response) {
-      _this.tasks = response.data;
-    });
+    this.getTask();
+  },
+  methods: {
+    getTask: function getTask() {
+      this.$emit('gettask', 'New');
+    }
   }
 });
 
@@ -38021,20 +38012,32 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "card" }, [
-    _c("div", { staticClass: "card-header" }, [_vm._v("Completed Task")]),
+    _c("div", { staticClass: "card-header" }, [_vm._v("Your Todo List")]),
     _vm._v(" "),
-    _c(
-      "div",
-      { staticClass: "card-body" },
-      _vm._l(_vm.tasks, function(task) {
-        return _c("ul", { staticClass: "list-group" }, [
-          _c("li", { staticClass: "list-group-item" }, [
-            _vm._v(_vm._s(task.title))
+    _c("div", { staticClass: "card-body" }, [
+      _c(
+        "div",
+        _vm._l(_vm.ctasks, function(task) {
+          return _c("ul", { staticClass: "list-group" }, [
+            _c("li", { staticClass: "list-group-item" }, [
+              _c("a", { attrs: { href: "task/" + task.id } }, [
+                _vm._v(_vm._s(task.title))
+              ]),
+              _c("br"),
+              _vm._v(" "),
+              _c("span", [_vm._v(_vm._s(task.updated_at))]),
+              _c("br"),
+              _vm._v(
+                "\n                    " +
+                  _vm._s(task.body) +
+                  "\n                "
+              )
+            ])
           ])
-        ])
-      }),
-      0
-    )
+        }),
+        0
+      )
+    ])
   ])
 }
 var staticRenderFns = []
@@ -38060,20 +38063,32 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "card" }, [
-    _c("div", { staticClass: "card-header" }, [_vm._v("In progress Task")]),
+    _c("div", { staticClass: "card-header" }, [_vm._v("Your Todo List")]),
     _vm._v(" "),
-    _c(
-      "div",
-      { staticClass: "card-body" },
-      _vm._l(_vm.tasks, function(task) {
-        return _c("ul", { staticClass: "list-group" }, [
-          _c("li", { staticClass: "list-group-item" }, [
-            _vm._v(_vm._s(task.title))
+    _c("div", { staticClass: "card-body" }, [
+      _c(
+        "div",
+        _vm._l(_vm.ptasks, function(task) {
+          return _c("ul", { staticClass: "list-group" }, [
+            _c("li", { staticClass: "list-group-item" }, [
+              _c("a", { attrs: { href: "task/" + task.id } }, [
+                _vm._v(_vm._s(task.title))
+              ]),
+              _c("br"),
+              _vm._v(" "),
+              _c("span", [_vm._v(_vm._s(task.updated_at))]),
+              _c("br"),
+              _vm._v(
+                "\n                    " +
+                  _vm._s(task.body) +
+                  "\n                "
+              )
+            ])
           ])
-        ])
-      }),
-      0
-    )
+        }),
+        0
+      )
+    ])
   ])
 }
 var staticRenderFns = []
@@ -38107,7 +38122,9 @@ var render = function() {
         _vm._l(_vm.tasks, function(task) {
           return _c("ul", { staticClass: "list-group" }, [
             _c("li", { staticClass: "list-group-item" }, [
-              _vm._v("\n                    " + _vm._s(task.title)),
+              _c("a", { attrs: { href: "task/" + task.id } }, [
+                _vm._v(_vm._s(task.title))
+              ]),
               _c("br"),
               _vm._v(" "),
               _c("span", [_vm._v(_vm._s(task.updated_at))]),
@@ -50332,7 +50349,32 @@ Vue.component('assign-select', __webpack_require__(/*! ./components/AssignTask.v
  */
 
 var app = new Vue({
-  el: '#app'
+  el: '#app',
+  data: {
+    tasks: [],
+    ptasks: [],
+    ctasks: []
+  },
+  methods: {
+    getTask: function getTask(status) {
+      var _this = this;
+
+      this.tasks = [];
+      axios.get('/home/tasks', {
+        params: {
+          status: status
+        }
+      }).then(function (response) {
+        if (status == "New") {
+          _this.tasks = response.data;
+        } else if (status == "In Progress") {
+          _this.ptasks = response.data;
+        } else if (status == "Completed") {
+          _this.ctasks = response.data;
+        } else {}
+      });
+    }
+  }
 });
 
 /***/ }),

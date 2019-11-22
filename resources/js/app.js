@@ -33,4 +33,29 @@ Vue.component('assign-select', require('./components/AssignTask.vue').default);
 
 const app = new Vue({
     el: '#app',
+    data: {
+        tasks: [],
+        ptasks: [],
+        ctasks: []
+    },
+    methods: {
+        getTask(status) {
+            this.tasks = [];
+            axios.get('/home/tasks', {
+                params: {
+                    status: status
+                }
+            }).then((response) => {
+                if (status == "New") {
+                    this.tasks = response.data;
+                } else if (status == "In Progress") {
+                    this.ptasks = response.data;
+                } else if (status == "Completed") {
+                    this.ctasks = response.data;
+                } else {
+
+                }
+            });
+        }
+    }
 });

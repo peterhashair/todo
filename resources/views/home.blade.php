@@ -5,7 +5,8 @@
         <div class="row justify-content-center">
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header"><a href="{{ route('task.create') }}" class="btn btn-success">Create Task</a>
+                    <div class="card-header"><a href="{{ route('task.create') }}" class="btn btn-success">Create
+                            Task</a>
                     </div>
 
                     <div class="card-body">
@@ -16,13 +17,13 @@
                         @endif
                         <div class="row">
                             <div class="col-md-4">
-                                <new-task></new-task>
+                                <new-task :tasks="tasks" v-on:gettask="getTask"></new-task>
                             </div>
                             <div class="col-md-4">
-                                <inprogress-task></inprogress-task>
+                                <inprogress-task :ptasks="ptasks" v-on:gettask="getTask"></inprogress-task>
                             </div>
                             <div class="col-md-4">
-                                <complete-task></complete-task>
+                                <complete-task :ctasks="ctasks" v-on:gettask="getTask"></complete-task>
                             </div>
                         </div>
                     </div>

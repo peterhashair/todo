@@ -5,7 +5,7 @@
             <div>
                 <ul class="list-group" v-for="task in tasks">
                     <li class="list-group-item">
-                        {{ task.title }}<br>
+                        <a v-bind:href="'task/'+task.id">{{ task.title }}</a><br>
                         <span>{{ task.updated_at }}</span><br>
                         {{ task.body }}
                     </li>
@@ -17,19 +17,15 @@
 
 <script>
     export default {
-        data() {
-            return {
-                tasks: []
-            }
-        },
+        props: ['tasks'],
         mounted() {
-            axios.get('/home/tasks', {
-                params: {
-                    status: "New"
-                }
-            }).then((response) => {
-                this.tasks = response.data;
-            });
+            this.getTask();
+        },
+        methods: {
+            getTask() {
+                this.$emit('gettask', 'New');
+
+            }
         }
     }
 </script>
