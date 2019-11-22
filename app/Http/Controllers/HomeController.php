@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Task;
 use App\User;
 use Illuminate\Http\Request;
 
@@ -24,8 +25,16 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $tasks = Task::all();
+        return view('home', compact('tasks'));
     }
+
+    public function getTask(Request $request)
+    {
+        $tasks = Task::where('status', $request->input('status'))->get();
+        return response()->json($tasks);
+    }
+
 
     public function users()
     {

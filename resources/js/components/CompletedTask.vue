@@ -2,7 +2,9 @@
     <div class="card">
         <div class="card-header">Completed Task</div>
         <div class="card-body">
-
+            <ul class="list-group" v-for="task in tasks">
+                <li class="list-group-item">{{ task.title }}</li>
+            </ul>
         </div>
     </div>
 </template>
@@ -15,7 +17,11 @@
             }
         },
         mounted() {
-            axios.get('/task').then((response) => {
+            axios.get('/home/tasks', {
+                params: {
+                    status: "Completed"
+                }
+            }).then((response) => {
                 this.tasks = response.data;
             });
         }
