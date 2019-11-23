@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Observers\AssignObserver;
 use App\Observers\TaskObserver;
 use App\Task;
+use App\TaskToUser;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -27,6 +29,6 @@ class AppServiceProvider extends ServiceProvider
     {
         // do the log start observe class watch the changes
         Task::observe(TaskObserver::class);
-
+        TaskToUser::observe(AssignObserver::class);
     }
 }

@@ -22,7 +22,7 @@
     Vue.component('multiselect', Multiselect)
 
     export default {
-        props: ['users'],
+        props: ['users', 'selectvalue'],
         // OR register locally
         components: {Multiselect},
         data() {
@@ -34,6 +34,10 @@
         },
         mounted() {
             this.options = JSON.parse(this.users);
+            if (this.selectvalue != "") {
+                this.value = JSON.parse(this.selectvalue);
+                this.onChange(this.value);
+            }
         },
         methods: {
             onChange: function (value) {
@@ -43,7 +47,14 @@
 
             },
             onRemove: function (option) {
-                this.assign.splice(option.id, 1);
+                for (let i = 0; i < this.assign.length; i++) {
+                    if (this.assign[i] == option.id) {
+                        console.log(i);
+                        this.assign.splice(i, 1);
+                        break;
+                    }
+                }
+
             }
         }
     }

@@ -7,6 +7,7 @@
                 <div class="card">
                     <div class="card-header"><a href="{{ route('task.create') }}" class="btn btn-success">Create
                             Task</a>
+                        <a style="float:right" href="{{ route('log.home') }}" class="btn btn-info">Show Log</a>
                     </div>
 
                     <div class="card-body">

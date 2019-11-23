@@ -32,7 +32,7 @@
                             </div>
                             <div class="form-group">
                                 <label>Assign to<span class="required">*</span></label>
-                                <assign-select users="{{ $users }}"></assign-select>
+                                <assign-select selectvalue="{{ $assigns }}" users="{{ $users }}"></assign-select>
                             </div>
                             <div class="form-group">
                                 <label>Description <span class="required">*</span></label>
@@ -41,9 +41,9 @@
                             <div class="form-group">
                                 <label>Status</label>
                                 <select class="form-control" name="status">
-                                    <option>New</option>
-                                    <option>In Progress</option>
-                                    <option>Completed</option>
+                                    <option @if($task->status=='New') selected @endif>New</option>
+                                    <option @if($task->status=='In Progress') selected @endif>In Progress</option>
+                                    <option @if($task->status=='Completed') selected @endif>Completed</option>
                                 </select>
                             </div>
                         </div>

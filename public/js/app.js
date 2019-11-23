@@ -1861,7 +1861,7 @@ __webpack_require__.r(__webpack_exports__);
 
 Vue.component('multiselect', vue_multiselect__WEBPACK_IMPORTED_MODULE_0___default.a);
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['users'],
+  props: ['users', 'selectvalue'],
   // OR register locally
   components: {
     Multiselect: vue_multiselect__WEBPACK_IMPORTED_MODULE_0___default.a
@@ -1875,6 +1875,11 @@ Vue.component('multiselect', vue_multiselect__WEBPACK_IMPORTED_MODULE_0___defaul
   },
   mounted: function mounted() {
     this.options = JSON.parse(this.users);
+
+    if (this.selectvalue != "") {
+      this.value = JSON.parse(this.selectvalue);
+      this.onChange(this.value);
+    }
   },
   methods: {
     onChange: function onChange(value) {
@@ -1883,7 +1888,13 @@ Vue.component('multiselect', vue_multiselect__WEBPACK_IMPORTED_MODULE_0___defaul
       }
     },
     onRemove: function onRemove(option) {
-      this.assign.splice(option.id, 1);
+      for (var i = 0; i < this.assign.length; i++) {
+        if (this.assign[i] == option.id) {
+          console.log(i);
+          this.assign.splice(i, 1);
+          break;
+        }
+      }
     }
   }
 });

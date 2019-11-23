@@ -18,6 +18,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
-Route::resource('task', 'TaskController')->except('edit','index');
+Route::resource('task', 'TaskController')->except('edit', 'index');
 Route::get("/home/tasks", 'HomeController@getTask');
 Route::put("/home/tasks/{id}", 'HomeController@changeTaskStatus');
+Route::get("/home/log", 'LogController@index')->name('log.home');

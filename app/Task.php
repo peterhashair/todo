@@ -22,7 +22,7 @@ class Task extends Model
 
     public function assign()
     {
-        return $this->hasOneThrough('App\User', 'App\TaskToUser','task_id','id','id','user_id');
+        return $this->hasManyThrough('App\User', 'App\TaskToUser','task_id','id','id','user_id');
 
     }
 

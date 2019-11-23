@@ -72,8 +72,18 @@ class TaskController extends Controller
             $query->where('user_id', Auth::id())->orwhere('tasks.user_id', Auth::id());
         })->find($id);
         if ($task) {
+            $assigns = array();
+            foreach ($task->assign as $ass) {
+                if ($ass->id != Auth::id()) {
+                    $assigns[] = array(
+                        'id' => $ass->id,
+                        'name' => $ass->name
+                    );
+                }
+            }
+            $assigns = json_encode($assigns);
             $users = User::select('id', 'name')->where('id', "!=", Auth::id())->get();
-            return view('task.show', compact('task', 'users'));
+            return view('task.show', compact('task', 'users', 'assigns'));
         } else {
             Session::flash('message', 'Task not found');
             return redirect('home');
@@ -104,7 +114,7 @@ class TaskController extends Controller
             $task->status = $request->input('status');
             $task->body = $request->input('description');
             if ($task->save()) {
-                $this->updateTaskToUser($task->id, Auth::id(), $request->input('assign'));
+                $this->updateTaskToUser($task->id, $request->input('assign'));
                 Session::flash('message', 'Successfully updated todo!');
                 return redirect('home');
             }
@@ -119,23 +129,22 @@ class TaskController extends Controller
      */
     public function destroy($id)
     {
-       Task::where('user_id',Auth::id())->find($id)->delete();
+        Task::where('user_id', Auth::id())->find($id)->delete();
     }
 
-    protected function updateTaskToUser($taskId, $userId, $assign)
+    protected function updateTaskToUser($taskId, $assign)
     {
-        TaskToUser::where('task_id',$taskId)->where('user_id',$userId)->delete();
+        TaskToUser::where('task_id', $taskId)->delete();
         $data = array();
-        if ($assign)
-        {
+        if ($assign) {
             $data = explode(",", $assign);
         }
-        if (!in_array(Auth::id(),$data)) {
+        if (!in_array(Auth::id(), $data)) {
             $data[] = Auth::id();
         }
         foreach ($data as $row) {
             $relation = new TaskToUser();
-            $relation->task_id =$taskId;
+            $relation->task_id = $taskId;
             $relation->user_id = $row;
             $relation->save();
         }

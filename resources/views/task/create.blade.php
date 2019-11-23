@@ -34,7 +34,7 @@
                             </div>
                             <div class="form-group">
                                 <label>Assign to (Auto assign to yourself even leave it blank)</label>
-                                <assign-select users="{{ $users }}"></assign-select>
+                                <assign-select selectvalue="" users="{{ $users }}"></assign-select>
                             </div>
                             <div class="form-group">
                                 <label>Description <span class="required">*</span></label>
