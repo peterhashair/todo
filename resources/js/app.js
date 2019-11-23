@@ -40,7 +40,6 @@ const app = new Vue({
     },
     methods: {
         getTask(status) {
-            this.tasks = [];
             axios.get('/home/tasks', {
                 params: {
                     status: status
@@ -57,8 +56,41 @@ const app = new Vue({
                 }
             });
         },
-        changeStatus(id, status) {
-            axios.put('/task/' + id);
+        changeStatus(id, index, status, list) {
+            console.log(status);
+            axios.put('/home/tasks/' + id, {
+                    status: status
+            }).then((response) => {
+                if (status == 'New')
+                    this.tasks.push(this.removeFromList(list,index));
+                else if (status == "In Progress")
+                    this.ptasks.push(this.removeFromList(list,index));
+                else
+                    this.ctasks.push(this.removeFromList(list,index));
+                ;
+            })
+        },
+
+        removeFromList(list,index) {
+            let data = null;
+            if (list == 1) {
+                data = this.tasks[index];
+                this.tasks.splice(index, 1);
+            } else if (list == 2) {
+                data = this.ptasks[index];
+                this.ptasks.splice(index, 1);
+            } else if (list == 3) {
+                data = this.ctasks[index];
+                this.ctasks.splice(index, 1);
+            }
+            return data;
+        },
+        // 1 = new 2 = in progress 3 = completed
+        deleteTask(id, index, list) {
+            axios.delete('/task/' + id).then((response) => {
+                this.removeFromList(list,index);
+            });
         }
+
     }
 });

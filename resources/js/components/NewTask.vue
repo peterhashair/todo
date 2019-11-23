@@ -1,20 +1,28 @@
 <template>
     <div class="card">
-        <div class="card-header">Your Todo List</div>
+        <div class="card-header">New</div>
         <div class="card-body">
-            <div>
-                <ul class="list-group" v-for="task in tasks">
-                    <li class="list-group-item">
-                        <a v-bind:href="'task/'+task.id">{{ task.title }}</a><br>
-                        <span>{{ task.updated_at }}</span><br>
-                        {{ task.body }}
+            <div v-for="(task,index) in tasks">
+                <div class="card">
+                    <div class="card-header"><a v-bind:href="'task/'+task.id">{{ task.title }}</a>
+                        <button style="float:right" class="btn btn-danger" v-on:click="deleteTask(task.id,index)">
+                            Delete
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <span>{{ task.updated_at }}</span>
                         <br>
-                        <button v-on:click="changeStatus(task.id,'In Progress')" class="btn btn-info">Set In Progress
+                        {{ task.body }}
+                    </div>
+                    <div class="card-footer">
+                        <button v-on:click="changeStatus(task.id,index,'In Progress')" class="btn btn-warning">Set In
+                            Progress
                         </button>
-                        <button v-on:click="changeStatus(task.id,'Completed')" class="btn btn-success">Set Completed
+                        <button v-on:click="changeStatus(task.id,index,'Completed')" class="btn btn-success">Set
+                            Completed
                         </button>
-                    </li>
-                </ul>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -31,9 +39,13 @@
                 this.$emit('gettask', 'New');
 
             },
-            changeStatus(id, status) {
-                this.$emit('changestatus', id, status);
+            changeStatus(id, index, status) {
+                this.$emit('changestatus', id, index, status, 1);
+            },
+            deleteTask(id, index) {
+                this.$emit('deletetask', id, index, 1);
             }
+
         }
     }
 </script>

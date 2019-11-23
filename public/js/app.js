@@ -1916,6 +1916,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['ctasks'],
   mounted: function mounted() {
@@ -1924,6 +1935,12 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     getTask: function getTask() {
       this.$emit('gettask', 'Completed');
+    },
+    changeStatus: function changeStatus(id, index, status) {
+      this.$emit('changestatus', id, index, status, 3);
+    },
+    deleteTask: function deleteTask(id, index) {
+      this.$emit('deletetask', id, index, 3);
     }
   }
 });
@@ -1956,6 +1973,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['ptasks'],
   mounted: function mounted() {
@@ -1964,6 +1992,12 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     getTask: function getTask() {
       this.$emit('gettask', 'In Progress');
+    },
+    changeStatus: function changeStatus(id, index, status) {
+      this.$emit('changestatus', id, index, status, 2);
+    },
+    deleteTask: function deleteTask(id, index) {
+      this.$emit('deletetask', id, index, 2);
     }
   }
 });
@@ -2001,6 +2035,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['tasks'],
   mounted: function mounted() {
@@ -2010,8 +2052,11 @@ __webpack_require__.r(__webpack_exports__);
     getTask: function getTask() {
       this.$emit('gettask', 'New');
     },
-    changeStatus: function changeStatus(id, status) {
-      this.$emit('changestatus', id, status);
+    changeStatus: function changeStatus(id, index, status) {
+      this.$emit('changestatus', id, index, status, 1);
+    },
+    deleteTask: function deleteTask(id, index) {
+      this.$emit('deletetask', id, index, 1);
     }
   }
 });
@@ -38020,32 +38065,81 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "card" }, [
-    _c("div", { staticClass: "card-header" }, [_vm._v("Your Todo List")]),
+    _c("div", { staticClass: "card-header" }, [_vm._v("Completed")]),
     _vm._v(" "),
-    _c("div", { staticClass: "card-body" }, [
-      _c(
-        "div",
-        _vm._l(_vm.ctasks, function(task) {
-          return _c("ul", { staticClass: "list-group" }, [
-            _c("li", { staticClass: "list-group-item" }, [
+    _c(
+      "div",
+      { staticClass: "card-body" },
+      _vm._l(_vm.ctasks, function(task, index) {
+        return _c("div", [
+          _c("div", { staticClass: "card" }, [
+            _c("div", { staticClass: "card-header" }, [
               _c("a", { attrs: { href: "task/" + task.id } }, [
                 _vm._v(_vm._s(task.title))
               ]),
-              _c("br"),
               _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-danger",
+                  staticStyle: { float: "right" },
+                  on: {
+                    click: function($event) {
+                      return _vm.deleteTask(task.id, index)
+                    }
+                  }
+                },
+                [
+                  _vm._v(
+                    "\n                        Delete\n                    "
+                  )
+                ]
+              )
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "card-body" }, [
               _c("span", [_vm._v(_vm._s(task.updated_at))]),
+              _vm._v(" "),
               _c("br"),
               _vm._v(
                 "\n                    " +
                   _vm._s(task.body) +
                   "\n                "
               )
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "card-footer" }, [
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-danger",
+                  on: {
+                    click: function($event) {
+                      return _vm.changeStatus(task.id, index, "New")
+                    }
+                  }
+                },
+                [_vm._v("Back To New\n                    ")]
+              ),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-warning",
+                  on: {
+                    click: function($event) {
+                      return _vm.changeStatus(task.id, index, "In Progress")
+                    }
+                  }
+                },
+                [_vm._v("Set In Progress\n                    ")]
+              )
             ])
           ])
-        }),
-        0
-      )
-    ])
+        ])
+      }),
+      0
+    )
   ])
 }
 var staticRenderFns = []
@@ -38071,32 +38165,81 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "card" }, [
-    _c("div", { staticClass: "card-header" }, [_vm._v("Your Todo List")]),
+    _c("div", { staticClass: "card-header" }, [_vm._v("In Progress")]),
     _vm._v(" "),
-    _c("div", { staticClass: "card-body" }, [
-      _c(
-        "div",
-        _vm._l(_vm.ptasks, function(task) {
-          return _c("ul", { staticClass: "list-group" }, [
-            _c("li", { staticClass: "list-group-item" }, [
+    _c(
+      "div",
+      { staticClass: "card-body" },
+      _vm._l(_vm.ptasks, function(task, index) {
+        return _c("div", [
+          _c("div", { staticClass: "card" }, [
+            _c("div", { staticClass: "card-header" }, [
               _c("a", { attrs: { href: "task/" + task.id } }, [
                 _vm._v(_vm._s(task.title))
               ]),
-              _c("br"),
               _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-danger",
+                  staticStyle: { float: "right" },
+                  on: {
+                    click: function($event) {
+                      return _vm.deleteTask(task.id, index)
+                    }
+                  }
+                },
+                [
+                  _vm._v(
+                    "\n                        Delete\n                    "
+                  )
+                ]
+              )
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "card-body" }, [
               _c("span", [_vm._v(_vm._s(task.updated_at))]),
+              _vm._v(" "),
               _c("br"),
               _vm._v(
                 "\n                    " +
                   _vm._s(task.body) +
                   "\n                "
               )
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "card-footer" }, [
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-danger",
+                  on: {
+                    click: function($event) {
+                      return _vm.changeStatus(task.id, index, "New")
+                    }
+                  }
+                },
+                [_vm._v("Back To New\n                    ")]
+              ),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-success",
+                  on: {
+                    click: function($event) {
+                      return _vm.changeStatus(task.id, index, "Completed")
+                    }
+                  }
+                },
+                [_vm._v("Set Completed\n                    ")]
+              )
             ])
           ])
-        }),
-        0
-      )
-    ])
+        ])
+      }),
+      0
+    )
   ])
 }
 var staticRenderFns = []
@@ -38122,39 +38265,65 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "card" }, [
-    _c("div", { staticClass: "card-header" }, [_vm._v("Your Todo List")]),
+    _c("div", { staticClass: "card-header" }, [_vm._v("New")]),
     _vm._v(" "),
-    _c("div", { staticClass: "card-body" }, [
-      _c(
-        "div",
-        _vm._l(_vm.tasks, function(task) {
-          return _c("ul", { staticClass: "list-group" }, [
-            _c("li", { staticClass: "list-group-item" }, [
+    _c(
+      "div",
+      { staticClass: "card-body" },
+      _vm._l(_vm.tasks, function(task, index) {
+        return _c("div", [
+          _c("div", { staticClass: "card" }, [
+            _c("div", { staticClass: "card-header" }, [
               _c("a", { attrs: { href: "task/" + task.id } }, [
                 _vm._v(_vm._s(task.title))
               ]),
-              _c("br"),
-              _vm._v(" "),
-              _c("span", [_vm._v(_vm._s(task.updated_at))]),
-              _c("br"),
-              _vm._v(
-                "\n                    " +
-                  _vm._s(task.body) +
-                  "\n                    "
-              ),
-              _c("br"),
               _vm._v(" "),
               _c(
                 "button",
                 {
-                  staticClass: "btn btn-info",
+                  staticClass: "btn btn-danger",
+                  staticStyle: { float: "right" },
                   on: {
                     click: function($event) {
-                      return _vm.changeStatus(task.id, "In Progress")
+                      return _vm.deleteTask(task.id, index)
                     }
                   }
                 },
-                [_vm._v("Set In Progress\n                    ")]
+                [
+                  _vm._v(
+                    "\n                        Delete\n                    "
+                  )
+                ]
+              )
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "card-body" }, [
+              _c("span", [_vm._v(_vm._s(task.updated_at))]),
+              _vm._v(" "),
+              _c("br"),
+              _vm._v(
+                "\n                    " +
+                  _vm._s(task.body) +
+                  "\n                "
+              )
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "card-footer" }, [
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-warning",
+                  on: {
+                    click: function($event) {
+                      return _vm.changeStatus(task.id, index, "In Progress")
+                    }
+                  }
+                },
+                [
+                  _vm._v(
+                    "Set In\n                        Progress\n                    "
+                  )
+                ]
               ),
               _vm._v(" "),
               _c(
@@ -38163,18 +38332,22 @@ var render = function() {
                   staticClass: "btn btn-success",
                   on: {
                     click: function($event) {
-                      return _vm.changeStatus(task.id, "Completed")
+                      return _vm.changeStatus(task.id, index, "Completed")
                     }
                   }
                 },
-                [_vm._v("Set Completed\n                    ")]
+                [
+                  _vm._v(
+                    "Set\n                        Completed\n                    "
+                  )
+                ]
               )
             ])
           ])
-        }),
-        0
-      )
-    ])
+        ])
+      }),
+      0
+    )
   ])
 }
 var staticRenderFns = []
@@ -50394,7 +50567,6 @@ var app = new Vue({
     getTask: function getTask(status) {
       var _this = this;
 
-      this.tasks = [];
       axios.get('/home/tasks', {
         params: {
           status: status
@@ -50409,8 +50581,40 @@ var app = new Vue({
         } else {}
       });
     },
-    changeStatus: function changeStatus(id, status) {
-      axios.put('/task/' + id);
+    changeStatus: function changeStatus(id, index, status, list) {
+      var _this2 = this;
+
+      console.log(status);
+      axios.put('/home/tasks/' + id, {
+        status: status
+      }).then(function (response) {
+        if (status == 'New') _this2.tasks.push(_this2.removeFromList(list, index));else if (status == "In Progress") _this2.ptasks.push(_this2.removeFromList(list, index));else _this2.ctasks.push(_this2.removeFromList(list, index));
+        ;
+      });
+    },
+    removeFromList: function removeFromList(list, index) {
+      var data = null;
+
+      if (list == 1) {
+        data = this.tasks[index];
+        this.tasks.splice(index, 1);
+      } else if (list == 2) {
+        data = this.ptasks[index];
+        this.ptasks.splice(index, 1);
+      } else if (list == 3) {
+        data = this.ctasks[index];
+        this.ctasks.splice(index, 1);
+      }
+
+      return data;
+    },
+    // 1 = new 2 = in progress 3 = completed
+    deleteTask: function deleteTask(id, index, list) {
+      var _this3 = this;
+
+      axios["delete"]('/task/' + id).then(function (response) {
+        _this3.removeFromList(list, index);
+      });
     }
   }
 });
@@ -50758,8 +50962,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /vagrant/code/Todo/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /vagrant/code/Todo/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /home/vagrant/code/todo/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /home/vagrant/code/todo/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

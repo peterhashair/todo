@@ -7,6 +7,7 @@ use App\TaskToUser;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use phpDocumentor\Reflection\DocBlock\Tags\Reference\Fqsen;
 
 class TaskController extends Controller
@@ -17,16 +18,6 @@ class TaskController extends Controller
         $this->middleware('auth');
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        $tasks = Task::all();
-
-    }
 
     /**
      * Show the form for creating a new resource.
@@ -36,7 +27,7 @@ class TaskController extends Controller
     public function create()
     {
         //
-        $users = User::select('id', 'name')->get();
+        $users = User::select('id', 'name')->where('id', "!=", Auth::id())->get();
         return view('task.create', compact('users'));
     }
 
@@ -50,24 +41,20 @@ class TaskController extends Controller
     {
         // valid post varibles
         $request->validate([
-            'title' => 'bail|required|unique:tasks|max:255',
-            'assign' => 'required',
+            'title' => 'required|max:255',
             'description' => 'required',
         ]);
+        // create new task
         $task = new Task();
         $task->title = $request->input('title');
         $task->user_id = Auth::id();
         $task->body = $request->input('description');
         $task->status = 'New';
+
+        //when the task create success add a relationship
         if ($task->save()) {
-            $assigns = explode(",", $request->input('assign'));
-            foreach ($assigns as $row) {
-                $task->user_id = Auth::id();
-                $relation = new TaskToUser();
-                $relation->task_id = $task->id;
-                $relation->user_id = $row;
-                $relation->save();
-            }
+            $this->updateTaskToUser($task->id, Auth::id(), $request->input('assign'));
+            Session::flash('message', 'Todo saved');
             return redirect('home');
         }
     }
@@ -80,18 +67,17 @@ class TaskController extends Controller
      */
     public function show($id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        //if task belong to login user.
+        $task = Task::whereHas('assign', function ($query) {
+            $query->where('user_id', Auth::id())->orwhere('tasks.user_id', Auth::id());
+        })->find($id);
+        if ($task) {
+            $users = User::select('id', 'name')->where('id', "!=", Auth::id())->get();
+            return view('task.show', compact('task', 'users'));
+        } else {
+            Session::flash('message', 'Task not found');
+            return redirect('home');
+        }
     }
 
     /**
@@ -104,6 +90,25 @@ class TaskController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $request->validate([
+            'title' => 'required|max:255',
+            'description' => 'required',
+        ]);
+        $task = Task::whereHas('assign', function ($query) {
+            $query->where('user_id', Auth::id())->orwhere('tasks.user_id', Auth::id());
+        })->find($id);
+
+        if ($task) {
+            $task->title = $request->input('title');
+            $task->user_id = Auth::id();
+            $task->status = $request->input('status');
+            $task->body = $request->input('description');
+            if ($task->save()) {
+                $this->updateTaskToUser($task->id, Auth::id(), $request->input('assign'));
+                Session::flash('message', 'Successfully updated todo!');
+                return redirect('home');
+            }
+        }
     }
 
     /**
@@ -114,6 +119,26 @@ class TaskController extends Controller
      */
     public function destroy($id)
     {
-        //
+       Task::where('user_id',Auth::id())->find($id)->delete();
+    }
+
+    protected function updateTaskToUser($taskId, $userId, $assign)
+    {
+        TaskToUser::where('task_id',$taskId)->where('user_id',$userId)->delete();
+        $data = array();
+        if ($assign)
+        {
+            $data = explode(",", $assign);
+        }
+        if (!in_array(Auth::id(),$data)) {
+            $data[] = Auth::id();
+        }
+        foreach ($data as $row) {
+            $relation = new TaskToUser();
+            $relation->task_id =$taskId;
+            $relation->user_id = $row;
+            $relation->save();
+        }
+
     }
 }

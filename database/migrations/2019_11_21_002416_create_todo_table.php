@@ -18,7 +18,7 @@ class CreateTodoTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->string('title');
             $table->longText('body');
-            $table->enum('status', array('New', 'Pending', 'In Progress', 'Completed', 'Postponed'));
+            $table->enum('status', array('New',  'In Progress', 'Completed'));
             $table->foreign('user_id')
                 ->references('id')->on('users')
                 ->onDelete('cascade');
