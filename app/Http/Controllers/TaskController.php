@@ -114,7 +114,7 @@ class TaskController extends Controller
             if ($task->save()) {
                 $this->updateTaskToUser($task->id, $request->input('assign'));
 
-                return redirect('home') > with('message', 'Successfully updated todo!');
+                return redirect('home')->with('message', 'Successfully updated todo!');
             }
         }
     }
