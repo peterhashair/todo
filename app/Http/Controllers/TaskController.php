@@ -54,8 +54,7 @@ class TaskController extends Controller
         //when the task create success add a relationship
         if ($task->save()) {
             $this->updateTaskToUser($task->id, Auth::id(), $request->input('assign'));
-            Session::flash('message', 'Todo saved');
-            return redirect('home');
+            return redirect('home')->with('message', 'Task successful saved');
         }
     }
 
@@ -85,8 +84,7 @@ class TaskController extends Controller
             $users = User::select('id', 'name')->where('id', "!=", Auth::id())->get();
             return view('task.show', compact('task', 'users', 'assigns'));
         } else {
-            Session::flash('message', 'Task not found');
-            return redirect('home');
+            return redirect('home')->with('message', 'Task not found');;
         }
     }
 
@@ -115,8 +113,8 @@ class TaskController extends Controller
             $task->body = $request->input('description');
             if ($task->save()) {
                 $this->updateTaskToUser($task->id, $request->input('assign'));
-                Session::flash('message', 'Successfully updated todo!');
-                return redirect('home');
+
+                return redirect('home') > with('message', 'Successfully updated todo!');
             }
         }
     }
@@ -129,7 +127,8 @@ class TaskController extends Controller
      */
     public function destroy($id)
     {
-        Task::where('user_id', Auth::id())->find($id)->delete();
+        if (Task::where('user_id', Auth::id())->find($id)->delete())
+            return response('success', 202);
     }
 
     protected function updateTaskToUser($taskId, $assign)
